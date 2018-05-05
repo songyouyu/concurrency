@@ -1,4 +1,4 @@
-package com.mmall.concurrency.example.count;
+package com.mmall.concurrency.example.atomic;
 
 import com.mmall.concurrency.annoations.ThreadSafe;
 import lombok.extern.slf4j.Slf4j;
@@ -7,11 +7,12 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.LongAdder;
+
 
 @Slf4j
 @ThreadSafe
-public class CountExample2 {
+public class AtomicExample3 {
 
     // 请求总数
     public static int clientTotal = 5000;
@@ -20,7 +21,7 @@ public class CountExample2 {
     public static int threadTotal = 200;
 
     //java自带的保证原子性的包
-    public static AtomicInteger count = new AtomicInteger(0);
+    public static LongAdder count = new LongAdder();
 
     public static void main(String[] args) throws Exception {
         ExecutorService executorService = Executors.newCachedThreadPool();
@@ -40,11 +41,10 @@ public class CountExample2 {
         }
         countDownLatch.await();
         executorService.shutdown();
-        log.info("count:{}", count.get());
+        log.info("count:{}", count);
     }
 
     private static void add() {
-        count.incrementAndGet();
-        // count.getAndIncrement();
+        count.increment();
     }
 }

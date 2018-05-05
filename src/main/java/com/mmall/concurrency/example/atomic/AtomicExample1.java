@@ -1,4 +1,4 @@
-package com.mmall.concurrency.example.count;
+package com.mmall.concurrency.example.atomic;
 
 import com.mmall.concurrency.annoations.ThreadSafe;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
 @ThreadSafe
-public class CountExample2 {
+public class AtomicExample1 {
 
     // 请求总数
     public static int clientTotal = 5000;
@@ -45,6 +45,6 @@ public class CountExample2 {
 
     private static void add() {
         count.incrementAndGet();
-        // count.getAndIncrement();
+        //count.getAndIncrement();
     }
 }
