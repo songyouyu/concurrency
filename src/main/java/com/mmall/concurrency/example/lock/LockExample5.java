@@ -1,16 +1,15 @@
-package com.mmall.concurrency;
+package com.mmall.concurrency.example.lock;
 
-import com.mmall.concurrency.annoations.NotThreadSafe;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.StampedLock;
 
 @Slf4j
-@NotThreadSafe
-public class ConcurrencyTest {
+public class LockExample5 {
 
     // 请求总数
     public static int clientTotal = 5000;
@@ -20,6 +19,8 @@ public class ConcurrencyTest {
 
     public static int count = 0;
 
+    private final static StampedLock lock = new StampedLock();
+
     public static void main(String[] args) throws Exception {
         ExecutorService executorService = Executors.newCachedThreadPool();
         final Semaphore semaphore = new Semaphore(threadTotal);
@@ -27,10 +28,8 @@ public class ConcurrencyTest {
         for (int i = 0; i < clientTotal ; i++) {
             executorService.execute(() -> {
                 try {
-                    //获取一个许可，如果没有，就等待
                     semaphore.acquire();
                     add();
-                    //操作完成后，释放一个许可出来
                     semaphore.release();
                 } catch (Exception e) {
                     log.error("exception", e);
@@ -44,6 +43,12 @@ public class ConcurrencyTest {
     }
 
     private static void add() {
-        count++;
+        long stamp = lock.writeLock();
+        try {
+            count++;
+        } finally {
+            lock.unlock(stamp);
+        }
+
     }
 }

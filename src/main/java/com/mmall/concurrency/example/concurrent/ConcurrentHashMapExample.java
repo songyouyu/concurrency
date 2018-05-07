@@ -40,7 +40,7 @@ public class ConcurrentHashMapExample {
         }
         countDownLatch.await();
         executorService.shutdown();
-        log.info("siez: {}", map.size());
+        log.info("size: {}", map.size());
     }
 
     private static void update(int count) {
