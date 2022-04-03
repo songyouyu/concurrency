@@ -6,7 +6,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
- * 读写锁
+ * 读写锁(不能升级，只能降级。读锁不能升级成写锁)
  * @author songyouyu
  * @date 2022/3/29
  */
